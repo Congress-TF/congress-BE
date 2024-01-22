@@ -1,13 +1,13 @@
-package com.congress.congressbe;
+package com.congress.commonmodule;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CongressBeApplicationTests {
+class CommonModuleApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
