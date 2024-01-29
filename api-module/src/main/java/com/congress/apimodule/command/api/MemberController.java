@@ -1,6 +1,7 @@
 package com.congress.apimodule.command.api;
 
 import com.congress.commonmodule.common.ApplicationResponse;
+import com.congress.coremodule.member.application.dto.MemberInfo;
 import com.congress.coremodule.member.application.dto.MemberSignIn;
 import com.congress.coremodule.member.application.service.MemberQueryUseCase;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,26 @@ public class MemberController {
 
         Boolean checkYn = memberQueryUseCase.checkSignIn(userId);
         return ApplicationResponse.ok(checkYn, "true : 가입 , false : 미가입");
+    }
+
+    /**
+     * 내 정보 확인
+     */
+    @GetMapping("/myinfo")
+    public ApplicationResponse<MemberInfo> getMyInfo(@RequestParam String userId) {
+
+        MemberInfo memberInfo = memberQueryUseCase.getMyInfo(userId);
+        return ApplicationResponse.ok(memberInfo, "내 정보 데이터입니다.");
+    }
+
+    /**
+     * 내 정보 수정
+     */
+    @PutMapping("/update")
+    public ApplicationResponse<String> updateMyInfo(@RequestBody MemberSignIn memberSignIn) {
+
+        memberQueryUseCase.updateMyInfo(memberSignIn);
+        return ApplicationResponse.ok(null, "회원 정보가 수정되었습니다.");
     }
 
     /**

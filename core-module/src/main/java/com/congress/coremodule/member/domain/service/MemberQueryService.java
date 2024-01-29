@@ -1,6 +1,7 @@
 package com.congress.coremodule.member.domain.service;
 
 import com.congress.commonmodule.exception.Error;
+import com.congress.coremodule.member.application.dto.MemberInfo;
 import com.congress.coremodule.member.application.dto.MemberSignIn;
 import com.congress.coremodule.member.application.mapper.MemberMapper;
 import com.congress.coremodule.member.domain.entity.Member;
@@ -21,6 +22,24 @@ public class MemberQueryService {
 
         Member member = memberRepository.findMemberByUserId(userId);
         return member != null;
+    }
+
+    public MemberInfo getMyInfo(String userId) {
+
+        Member member = memberRepository.findMemberByUserId(userId);
+
+        return MemberInfo.builder()
+                .nickname(member.getNickname())
+                .gender(member.getGender())
+                .year(member.getYear())
+                .build();
+
+    }
+
+    public void updateMyInfo(MemberSignIn memberSignIn) {
+
+        Member member = memberRepository.findMemberByUserId(memberSignIn.getUserId());
+        member.setMember(memberSignIn);
     }
 
     public void signIn(MemberSignIn memberSignIn) {
