@@ -11,6 +11,11 @@ public class MemberQueryUseCase {
 
     private final MemberQueryService memberQueryService;
 
+    public Boolean checkSignIn(String userId) {
+
+        return memberQueryService.checkSignIn(userId);
+    }
+
     public void signIn(MemberSignIn memberSignIn) {
 
         memberQueryService.signIn(memberSignIn);
