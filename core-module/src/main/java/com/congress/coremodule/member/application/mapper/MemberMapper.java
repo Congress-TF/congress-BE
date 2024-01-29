@@ -12,10 +12,9 @@ public final class MemberMapper {
 
         return Member.builder()
                 .nickname(memberSignIn.getNickname())
-                .email(memberSignIn.getEmail())
                 .gender(memberSignIn.getGender())
                 .year(memberSignIn.getYear())
-                .intend(memberSignIn.getIntend())
+                .userId(memberSignIn.getUserId())
                 .isDeleted(false)
                 .build();
     }

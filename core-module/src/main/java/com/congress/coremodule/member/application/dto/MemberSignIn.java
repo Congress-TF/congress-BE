@@ -10,6 +10,5 @@ public class MemberSignIn {
     private String nickname;
     private String gender;
     private String year;
-    private String email;
-    private String intend;
+    private String userId;
 }
