@@ -15,7 +15,7 @@ public enum Error {
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
     WRONG_PASSWORD("비밀번호가 틀렸습니다.", 2001),
-    MEMBER_DEAITL_NOT_FOUND("사용자 상세 정보를 찾을 수 없습니다.", 2002)
+    DUPLICATE_MEMBER("이미 가입된 사용자입니다.", 400)
 
     ;
 
