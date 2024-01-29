@@ -1,5 +1,6 @@
 package com.congress.coremodule.member.domain.entity;
 
+import com.congress.coremodule.member.application.dto.MemberSignIn;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,12 @@ public class Member {
 
     public void deleteMember() {
         this.isDeleted = true;
+    }
+
+    public void setMember(MemberSignIn memberSignIn) {
+        this.nickname = memberSignIn.getNickname();
+        this.gender = memberSignIn.getGender();
+        this.year = memberSignIn.getYear();
     }
 
 }
