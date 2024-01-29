@@ -17,6 +17,12 @@ public class MemberQueryService {
 
     private final MemberRepository memberRepository;
 
+    public Boolean checkSignIn(String userId) {
+
+        Member member = memberRepository.findMemberByUserId(userId);
+        return member != null;
+    }
+
     public void signIn(MemberSignIn memberSignIn) {
 
         Member member = MemberMapper.toMember(memberSignIn);
