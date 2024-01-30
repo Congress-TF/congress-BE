@@ -59,10 +59,10 @@ public class MemberController {
     /**
      * 회원탈퇴
      */
-    @DeleteMapping("/{memberId}/signout")
-    public ApplicationResponse<Void> signout(@PathVariable Long memberId) {
+    @DeleteMapping("/{userId}/signout")
+    public ApplicationResponse<Void> signout(@PathVariable String userId) {
 
-        memberQueryUseCase.signOut(memberId);
+        memberQueryUseCase.signOut(userId);
         return ApplicationResponse.ok(null, "회원탈퇴가 완료되었습니다.");
     }
 

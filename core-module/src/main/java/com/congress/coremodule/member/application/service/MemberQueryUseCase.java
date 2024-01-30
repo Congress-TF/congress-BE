@@ -40,8 +40,8 @@ public class MemberQueryUseCase {
         }
     }
 
-    public void signOut(Long memberId) {
+    public void signOut(String userId) {
 
-        memberQueryService.signOut(memberId);
+        memberQueryService.signOut(userId);
     }
 }
