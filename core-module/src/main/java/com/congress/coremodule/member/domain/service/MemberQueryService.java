@@ -1,11 +1,11 @@
 package com.congress.coremodule.member.domain.service;
 
+import com.congress.commonmodule.exception.BusinessException;
 import com.congress.commonmodule.exception.Error;
 import com.congress.coremodule.member.application.dto.MemberInfo;
 import com.congress.coremodule.member.application.dto.MemberSignIn;
 import com.congress.coremodule.member.application.mapper.MemberMapper;
 import com.congress.coremodule.member.domain.entity.Member;
-import com.congress.coremodule.member.domain.exception.MemberException;
 import com.congress.coremodule.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,12 +28,15 @@ public class MemberQueryService {
 
         Member member = memberRepository.findMemberByUserId(userId);
 
-        return MemberInfo.builder()
-                .nickname(member.getNickname())
-                .gender(member.getGender())
-                .year(member.getYear())
-                .build();
-
+        if (member == null) {
+            throw new BusinessException(Error.MEMBER_NOT_FOUND);
+        } else {
+            return MemberInfo.builder()
+                    .nickname(member.getNickname())
+                    .gender(member.getGender())
+                    .year(member.getYear())
+                    .build();
+        }
     }
 
     public void updateMyInfo(MemberSignIn memberSignIn) {
@@ -48,9 +51,14 @@ public class MemberQueryService {
         memberRepository.save(member);
     }
 
-    public void signOut(Long memberId) {
+    public void signOut(String userId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(Error.MEMBER_NOT_FOUND));
-        member.deleteMember();
+        Member member = memberRepository.findMemberByUserId(userId);
+
+        if (member == null) {
+            throw new BusinessException(Error.MEMBER_NOT_FOUND);
+        } else {
+            member.deleteMember();
+        }
     }
 }

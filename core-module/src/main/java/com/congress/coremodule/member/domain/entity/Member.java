@@ -3,11 +3,13 @@ package com.congress.coremodule.member.domain.entity;
 import com.congress.coremodule.member.application.dto.MemberSignIn;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@Where(clause = "is_deleted = false")
 public class Member {
 
     @Id
