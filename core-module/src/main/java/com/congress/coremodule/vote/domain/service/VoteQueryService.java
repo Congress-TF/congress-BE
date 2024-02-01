@@ -38,8 +38,8 @@ public class VoteQueryService {
         }
     }
 
-    public List<HashTagRank> getHashTagRank() {
+    public List<HashTagRank> getHashTagRank(Long lawId) {
 
-        return hashTagRepository.findTagCounts();
+        return hashTagRepository.findTagCounts(lawId);
     }
 }

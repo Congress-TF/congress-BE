@@ -19,8 +19,8 @@ public class VoteQueryUseCase {
         voteQueryService.saveHashTag(hashTagInfo);
     }
 
-    public List<HashTagRank> getHashTagRank() {
+    public List<HashTagRank> getHashTagRank(Long lawId) {
 
-        return voteQueryService.getHashTagRank();
+        return voteQueryService.getHashTagRank(lawId);
     }
 }
