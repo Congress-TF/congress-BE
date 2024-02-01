@@ -10,5 +10,5 @@ import lombok.extern.jackson.Jacksonized;
 public class HashTagRank {
 
     private String tag;
-    private Integer count;
+    private Long count;
 }

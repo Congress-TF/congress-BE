@@ -33,10 +33,11 @@ public class HashTagController {
     /**
      * 해시태그 순위 조회
      */
-    @GetMapping("rank")
-    public ApplicationResponse<List<HashTagRank>> getHashTagRank() {
+    @GetMapping("/{lawId}/rank")
+    public ApplicationResponse<List<HashTagRank>> getHashTagRank(
+            @PathVariable Long lawId) {
 
-        List<HashTagRank> results = voteQueryUseCase.getHashTagRank();
+        List<HashTagRank> results = voteQueryUseCase.getHashTagRank(lawId);
         return ApplicationResponse.ok(results, "해시태그 순위 조회 결과입니다.");
     }
 }
