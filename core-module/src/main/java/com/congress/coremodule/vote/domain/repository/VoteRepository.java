@@ -5,8 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     @Query("SELECT COUNT(*) FROM Vote v WHERE v.member.userId = :userId AND v.law.id = :lawId")
     long countByUserIdAndLawId(@Param("userId") String userId, @Param("lawId") Long lawId);
+
+    List<Vote> findVotesByLaw_Id(Long lawId);
 }

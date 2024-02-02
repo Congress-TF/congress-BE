@@ -60,4 +60,13 @@ public class VoteQueryService {
             voteRepository.save(vote);
         }
     }
+
+    public Integer getTotalScore(Long lawId) {
+
+        List<Vote> votes = voteRepository.findVotesByLaw_Id(lawId);
+
+        return votes.stream()
+                .map(Vote::getScore)
+                .reduce(0, Integer::sum);
+    }
 }
