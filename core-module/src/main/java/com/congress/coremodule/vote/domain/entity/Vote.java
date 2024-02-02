@@ -10,14 +10,14 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class HashTag {
+public class Vote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_id")
+    @Column(name = "vote_id")
     private Long id;
 
-    private String tag;
+    private Integer score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -26,5 +26,4 @@ public class HashTag {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "law_id")
     private Law law;
-
 }

@@ -3,6 +3,7 @@ package com.congress.coremodule.vote.application.mapper;
 import com.congress.coremodule.law.domain.entity.Law;
 import com.congress.coremodule.member.domain.entity.Member;
 import com.congress.coremodule.vote.domain.entity.HashTag;
+import com.congress.coremodule.vote.domain.entity.Vote;
 
 public class HashTagMapper {
 
@@ -13,6 +14,15 @@ public class HashTagMapper {
 
         return HashTag.builder()
                 .tag(tag)
+                .member(member)
+                .law(law)
+                .build();
+    }
+
+    public static Vote toVote(Integer score, Member member, Law law) {
+
+        return Vote.builder()
+                .score(score)
                 .member(member)
                 .law(law)
                 .build();
