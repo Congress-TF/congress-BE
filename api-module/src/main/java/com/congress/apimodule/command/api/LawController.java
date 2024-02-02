@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -45,4 +47,10 @@ public class LawController {
     /**
      * 전체 법률 목록
      */
+    @GetMapping("/lists")
+    public ApplicationResponse<List<LawDetail>> getLawLists() {
+
+        List<LawDetail> result = lawQueryUseCase.getTotalLaws();
+        return ApplicationResponse.ok(result, "법률 목록입니다.");
+    }
 }

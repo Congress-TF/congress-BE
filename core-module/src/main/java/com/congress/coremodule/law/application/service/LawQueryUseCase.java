@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +55,45 @@ public class LawQueryUseCase {
         }
 
         return result;
+    }
+
+    public List<LawDetail> getTotalLaws() {
+        String apiUrl = "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21";
+        List<LawDetail> lawDetails = new ArrayList<>();
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(apiUrl, String.class);
+        String responseBody = responseEntity.getBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            JsonNode dataArray = rootNode.get("nzmimeepazxkubdpn").get(1).get("row");
+
+            for (JsonNode dataNode : dataArray) {
+
+                String billNo = dataNode.get("BILL_NO").asText();
+                String billName = dataNode.get("BILL_NAME").asText();
+                String proposer = dataNode.get("PROPOSER").asText();
+                String proposeDt = dataNode.get("PROPOSE_DT").asText();
+                String detailLink = dataNode.get("DETAIL_LINK").asText();
+
+                LawDetail result = new LawDetail();
+                result.setBillNo(billNo);
+                result.setBillNm(billName);
+                result.setProposer(proposer);
+                result.setProposerDt(proposeDt);
+                result.setDetailLink(detailLink);
+
+                lawDetails.add(result);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Collections.sort(lawDetails, Comparator.comparing(LawDetail::getBillNm));
+        return lawDetails;
     }
 
     public LawDetail getLawDetail(LawVoteReq req) {
