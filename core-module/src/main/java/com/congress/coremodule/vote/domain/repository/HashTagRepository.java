@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface HashTagRepository extends JpaRepository<HashTag, Long> {
 
-    @Query("SELECT COUNT(*) FROM HashTag h WHERE h.member.userId = :userId AND h.law.id = :lawId")
-    long countByUserIdAndLawId(@Param("userId") String userId, @Param("lawId") Long lawId);
+    @Query("SELECT COUNT(*) FROM HashTag h WHERE h.member.userId = :userId AND h.law.name = :lawName")
+    long countByUserIdAndLawName(@Param("userId") String userId, @Param("lawName") String lawName);
 
     @Query("SELECT new com.congress.coremodule.vote.application.dto.HashTagRank(h.tag, COUNT(h)) FROM HashTag h " +
             "where h.law.name = :lawName GROUP BY h.tag ORDER BY COUNT(h) DESC")

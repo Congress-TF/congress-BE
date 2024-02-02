@@ -30,12 +30,12 @@ public class VoteQueryService {
 
     public void saveHashTag(HashTagInfo hashTagInfo) {
 
-        if (hashTagRepository.countByUserIdAndLawId(hashTagInfo.getUserId(), hashTagInfo.getLawId()) >= 1) {
+        if (hashTagRepository.countByUserIdAndLawName(hashTagInfo.getUserId(), hashTagInfo.getLawName()) >= 1) {
             throw new VoteException(Error.HASHTAG_DUPLICATE);
         } else {
 
             Member member = memberRepository.findMemberByUserId(hashTagInfo.getUserId());
-            Law law = lawRepository.findLawById(hashTagInfo.getLawId());
+            Law law = lawRepository.findLawByName(hashTagInfo.getLawName());
 
             HashTag hashTag = HashTagMapper.toHashTag(hashTagInfo.getTag(), member, law);
             hashTagRepository.save(hashTag);
@@ -49,12 +49,12 @@ public class VoteQueryService {
 
     public void saveVote(VoteInfo voteInfo) {
 
-        if (voteRepository.countByUserIdAndLawId(voteInfo.getUserId(), voteInfo.getLawId()) >= 1) {
+        if (voteRepository.countByUserIdAndLawName(voteInfo.getUserId(), voteInfo.getLawName()) >= 1) {
             throw new VoteException(Error.VOTE_DUPLICATE);
         } else {
 
             Member member = memberRepository.findMemberByUserId(voteInfo.getUserId());
-            Law law = lawRepository.findLawById(voteInfo.getLawId());
+            Law law = lawRepository.findLawByName(voteInfo.getLawName());
 
             Vote vote = HashTagMapper.toVote(voteInfo.getScore(), member, law);
             voteRepository.save(vote);

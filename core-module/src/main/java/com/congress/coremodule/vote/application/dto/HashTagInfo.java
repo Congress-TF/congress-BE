@@ -10,6 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 public class HashTagInfo {
 
     private String userId;
-    private Long lawId;
+    private String lawName;
     private String tag;
 }

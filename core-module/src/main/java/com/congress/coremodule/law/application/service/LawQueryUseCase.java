@@ -41,7 +41,7 @@ public class LawQueryUseCase {
 
             for (JsonNode dataNode : dataArray) {
 
-                if (req.getLawId().toString().equals(dataNode.get("BILL_NO").asText())) {
+                if (req.getLawName().equals(dataNode.get("BILL_NM").asText())) {
 
                     String billName = dataNode.get("BILL_NM").asText();
                     String yesCount = dataNode.get("YES_TCNT").asText();
@@ -121,7 +121,7 @@ public class LawQueryUseCase {
 
             for (JsonNode dataNode : dataArray) {
 
-                if (req.getLawId().toString().equals(dataNode.get("BILL_NO").asText())) {
+                if (req.getLawName().equals(dataNode.get("BILL_NAME").asText())) {
 
                     String billNo = dataNode.get("BILL_NO").asText();
                     String billName = dataNode.get("BILL_NAME").asText();
@@ -135,6 +135,9 @@ public class LawQueryUseCase {
                     result.setProposerDt(proposeDt);
                     result.setDetailLink(detailLink);
 
+                    if (!lawQueryService.isLawAlreadySaved(result.getBillNm())) {
+                        lawQueryService.saveLaw(result.getBillNm());
+                    }
                     return result;
                 }
             }
@@ -143,7 +146,6 @@ public class LawQueryUseCase {
             e.printStackTrace();
         }
 
-        lawQueryService.saveLaw(result.getBillNm());
         return result;
     }
 

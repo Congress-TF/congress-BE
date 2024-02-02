@@ -10,6 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 public class VoteInfo {
 
     private String userId;
-    private Long lawId;
+    private String lawName;
     private Integer score;
 }

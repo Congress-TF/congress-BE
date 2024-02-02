@@ -10,5 +10,5 @@ import lombok.extern.jackson.Jacksonized;
 public class LawVoteReq {
 
     private String userId;
-    private Long lawId;
+    private String lawName;
 }
