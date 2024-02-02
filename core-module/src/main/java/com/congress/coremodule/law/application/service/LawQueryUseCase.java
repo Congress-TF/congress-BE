@@ -4,6 +4,8 @@ import com.congress.coremodule.law.application.dto.LawVoteReq;
 import com.congress.coremodule.law.application.dto.LawVoteResult;
 import com.congress.coremodule.law.domain.service.LawQueryService;
 import com.congress.coremodule.vote.application.dto.LawDetail;
+import com.congress.coremodule.vote.application.dto.LawTotal;
+import com.congress.coremodule.vote.domain.service.VoteQueryService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.List;
 public class LawQueryUseCase {
 
     private final LawQueryService lawQueryService;
+    private final VoteQueryService voteQueryService;
 
     public LawVoteResult getVoteResult(LawVoteReq req) {
         String apiUrl = "https://open.assembly.go.kr/portal/openapi/nwbpacrgavhjryiph?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21";
@@ -57,9 +60,9 @@ public class LawQueryUseCase {
         return result;
     }
 
-    public List<LawDetail> getTotalLaws() {
+    public List<LawTotal> getTotalLaws() {
         String apiUrl = "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21";
-        List<LawDetail> lawDetails = new ArrayList<>();
+        List<LawTotal> lawTotals = new ArrayList<>();
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(apiUrl, String.class);
@@ -78,22 +81,29 @@ public class LawQueryUseCase {
                 String proposeDt = dataNode.get("PROPOSE_DT").asText();
                 String detailLink = dataNode.get("DETAIL_LINK").asText();
 
-                LawDetail result = new LawDetail();
+                Integer score = voteQueryService.getTotalScore(billName);
+
+                if (score == null) {
+                    score = 0;
+                }
+
+                LawTotal result = new LawTotal();
                 result.setBillNo(billNo);
                 result.setBillNm(billName);
                 result.setProposer(proposer);
                 result.setProposerDt(proposeDt);
                 result.setDetailLink(detailLink);
+                result.setScore(score);
 
-                lawDetails.add(result);
+                lawTotals.add(result);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Collections.sort(lawDetails, Comparator.comparing(LawDetail::getBillNm));
-        return lawDetails;
+        Collections.sort(lawTotals, Comparator.comparing(LawTotal::getBillNm));
+        return lawTotals;
     }
 
     public LawDetail getLawDetail(LawVoteReq req) {
@@ -133,6 +143,7 @@ public class LawQueryUseCase {
             e.printStackTrace();
         }
 
+        lawQueryService.saveLaw(result.getBillNm());
         return result;
     }
 
