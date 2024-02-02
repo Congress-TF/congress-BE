@@ -2,6 +2,7 @@ package com.congress.coremodule.vote.application.service;
 
 import com.congress.coremodule.vote.application.dto.HashTagInfo;
 import com.congress.coremodule.vote.application.dto.HashTagRank;
+import com.congress.coremodule.vote.application.dto.VoteInfo;
 import com.congress.coremodule.vote.domain.service.VoteQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,10 @@ public class VoteQueryUseCase {
     public List<HashTagRank> getHashTagRank(Long lawId) {
 
         return voteQueryService.getHashTagRank(lawId);
+    }
+
+    public void saveRenewalScore(VoteInfo voteInfo) {
+
+        voteQueryService.saveVote(voteInfo);
     }
 }
