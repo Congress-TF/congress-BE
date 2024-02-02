@@ -20,9 +20,9 @@ public class VoteQueryUseCase {
         voteQueryService.saveHashTag(hashTagInfo);
     }
 
-    public List<HashTagRank> getHashTagRank(Long lawId) {
+    public List<HashTagRank> getHashTagRank(String lawName) {
 
-        return voteQueryService.getHashTagRank(lawId);
+        return voteQueryService.getHashTagRank(lawName);
     }
 
     public void saveRenewalScore(VoteInfo voteInfo) {
@@ -30,8 +30,8 @@ public class VoteQueryUseCase {
         voteQueryService.saveVote(voteInfo);
     }
 
-    public Integer getTotalScore(Long lawId) {
+    public Integer getTotalScore(String lawName) {
 
-        return voteQueryService.getTotalScore(lawId);
+        return voteQueryService.getTotalScore(lawName);
     }
 }

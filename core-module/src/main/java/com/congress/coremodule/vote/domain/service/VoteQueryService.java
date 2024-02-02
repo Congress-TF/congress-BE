@@ -42,9 +42,9 @@ public class VoteQueryService {
         }
     }
 
-    public List<HashTagRank> getHashTagRank(Long lawId) {
+    public List<HashTagRank> getHashTagRank(String lawName) {
 
-        return hashTagRepository.findTagCounts(lawId);
+        return hashTagRepository.findTagCounts(lawName);
     }
 
     public void saveVote(VoteInfo voteInfo) {
@@ -61,9 +61,9 @@ public class VoteQueryService {
         }
     }
 
-    public Integer getTotalScore(Long lawId) {
+    public Integer getTotalScore(String lawName) {
 
-        List<Vote> votes = voteRepository.findVotesByLaw_Id(lawId);
+        List<Vote> votes = voteRepository.findVotesByLawName(lawName);
 
         return votes.stream()
                 .map(Vote::getScore)

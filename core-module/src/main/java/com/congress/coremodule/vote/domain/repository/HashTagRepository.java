@@ -14,6 +14,6 @@ public interface HashTagRepository extends JpaRepository<HashTag, Long> {
     long countByUserIdAndLawId(@Param("userId") String userId, @Param("lawId") Long lawId);
 
     @Query("SELECT new com.congress.coremodule.vote.application.dto.HashTagRank(h.tag, COUNT(h)) FROM HashTag h " +
-            "where h.law.id = :lawId GROUP BY h.tag ORDER BY COUNT(h) DESC")
-    List<HashTagRank> findTagCounts(@Param("lawId") Long lawId);
+            "where h.law.name = :lawName GROUP BY h.tag ORDER BY COUNT(h) DESC")
+    List<HashTagRank> findTagCounts(@Param("lawName") String lawName);
 }
