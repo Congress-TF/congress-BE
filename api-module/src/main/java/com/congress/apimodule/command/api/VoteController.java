@@ -29,11 +29,11 @@ public class VoteController {
     /**
      * 누적 개정 필요도 보여주기
      */
-    @GetMapping("/{lawId}/total")
+    @GetMapping("/{lawName}/total")
     public ApplicationResponse<Integer> voteSum(
-            @PathVariable Long lawId) {
+            @PathVariable String lawName) {
 
-        Integer total = voteQueryUseCase.getTotalScore(lawId);
+        Integer total = voteQueryUseCase.getTotalScore(lawName);
         return ApplicationResponse.ok(total, "누적 개정 필요도 점수입니다.");
     }
 }
