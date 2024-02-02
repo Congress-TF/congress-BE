@@ -21,7 +21,7 @@ public class LawQueryService {
         lawRepository.save(law);
     }
 
-    public boolean isLawNameAlreadySaved(String lawName) {
+    public boolean isLawAlreadySaved(String lawName) {
         Optional<Law> existingLaw = Optional.ofNullable(lawRepository.findLawByName(lawName));
         return existingLaw.isPresent();
     }
