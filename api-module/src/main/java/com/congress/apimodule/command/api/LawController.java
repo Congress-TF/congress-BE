@@ -4,6 +4,7 @@ import com.congress.commonmodule.common.ApplicationResponse;
 import com.congress.coremodule.law.application.dto.LawVoteReq;
 import com.congress.coremodule.law.application.dto.LawVoteResult;
 import com.congress.coremodule.law.application.service.LawQueryUseCase;
+import com.congress.coremodule.vote.application.dto.LawDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,13 @@ public class LawController {
     /**
      * 의안 상세페이지 정보
      */
+    @GetMapping("/detail")
+    public ApplicationResponse<LawDetail> getLawDeail(
+            @RequestBody LawVoteReq lawVoteReq) {
+
+        LawDetail result = lawQueryUseCase.getLawDetail(lawVoteReq);
+        return ApplicationResponse.ok(result, "의안 상세페이지 정보입니다.");
+    }
 
     /**
      * 전체 법률 목록
