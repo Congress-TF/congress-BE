@@ -13,4 +13,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     long countByUserIdAndLawName(@Param("userId") String userId, @Param("lawName") String lawName);
 
     List<Vote> findVotesByLawName(String name);
+
+    Vote findVoteByMemberId(Long memberId);
 }
