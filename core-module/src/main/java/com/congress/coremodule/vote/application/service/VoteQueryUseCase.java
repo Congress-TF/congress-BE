@@ -29,4 +29,9 @@ public class VoteQueryUseCase {
 
         voteQueryService.saveVote(voteInfo);
     }
+
+    public Integer getTotalScore(Long lawId) {
+
+        return voteQueryService.getTotalScore(lawId);
+    }
 }
