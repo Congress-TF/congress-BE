@@ -30,7 +30,8 @@ public class LawQueryUseCase {
     private final VoteQueryService voteQueryService;
 
     public LawVoteResult getVoteResult(LawVoteReq req) {
-        String apiUrl = "https://open.assembly.go.kr/portal/openapi/nwbpacrgavhjryiph?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21";
+        String apiUrl = "https://open.assembly.go.kr/portal/openapi/nwbpacrgavhjryiph?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21"
+                + "&BILL_NM=" + req.getLawName();
         LawVoteResult result = new LawVoteResult();
 
         RestTemplate restTemplate = new RestTemplate();
@@ -44,16 +45,13 @@ public class LawQueryUseCase {
 
             for (JsonNode dataNode : dataArray) {
 
-                if (req.getLawName().equals(dataNode.get("BILL_NM").asText())) {
+                String billName = dataNode.get("BILL_NM").asText();
+                String yesCount = dataNode.get("YES_TCNT").asText();
 
-                    String billName = dataNode.get("BILL_NM").asText();
-                    String yesCount = dataNode.get("YES_TCNT").asText();
+                result.setBillNm(billName);
+                result.setYesCount(yesCount);
 
-                    result.setBillNm(billName);
-                    result.setYesCount(yesCount);
-
-                    return result;
-                }
+                return result;
             }
 
         } catch (IOException e) {
