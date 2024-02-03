@@ -2,9 +2,12 @@ package com.congress.coremodule.law.application.service;
 
 import com.congress.coremodule.law.application.dto.LawVoteReq;
 import com.congress.coremodule.law.application.dto.LawVoteResult;
+import com.congress.coremodule.law.application.dto.LegislatorReq;
 import com.congress.coremodule.law.domain.service.LawQueryService;
 import com.congress.coremodule.vote.application.dto.LawDetail;
 import com.congress.coremodule.vote.application.dto.LawTotal;
+import com.congress.coremodule.vote.application.dto.LegislatorDetail;
+import com.congress.coremodule.vote.application.dto.LegislatorList;
 import com.congress.coremodule.vote.domain.service.VoteQueryService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -149,5 +152,95 @@ public class LawQueryUseCase {
         return result;
     }
 
+    public LegislatorDetail getLegislatorDetail(LegislatorReq req) {
+        String apiUrl = "https://open.assembly.go.kr/portal/openapi/npffdutiapkzbfyvr?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&UNIT_CD=100020";
+        LegislatorDetail result = new LegislatorDetail();
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(apiUrl, String.class);
+        String responseBody = responseEntity.getBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            JsonNode dataArray = rootNode.get("npffdutiapkzbfyvr").get(1).get("row");
+
+            for (JsonNode dataNode : dataArray) {
+
+                if (req.getLegislatorName().equals(dataNode.get("HG_NM").asText())) {
+
+                    String hgNm = dataNode.get("HG_NM").asText();
+                    String bthDate = dataNode.get("BTH_DATE").asText();
+                    String sexGbnNm = dataNode.get("SEX_GBN_NM").asText();
+                    String reeleGbnNm = dataNode.get("REELE_GBN_NM").asText();
+                    String units = dataNode.get("UNITS").asText();
+                    String unitNm = dataNode.get("UNIT_NM").asText();
+                    String polyNm = dataNode.get("POLY_NM").asText();
+                    String origNm = dataNode.get("ORIG_NM").asText();
+
+                    result.setHgNm(hgNm);
+                    result.setBthDate(bthDate);
+                    result.setSexGbnNm(sexGbnNm);
+                    result.setReeleGbnNm(reeleGbnNm);
+                    result.setUnits(units);
+                    result.setUnitNm(unitNm);
+                    result.setPolyNm(polyNm);
+                    result.setOrigNm(origNm);
+
+                    if (!lawQueryService.isLegislatorAlreadySaved(result.getHgNm())) {
+                        lawQueryService.saveLegislator(result.getHgNm());
+                    }
+                    return result;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public List<LegislatorList> getTotalLegislators() {
+        String apiUrl = "https://open.assembly.go.kr/portal/openapi/npffdutiapkzbfyvr?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&UNIT_CD=100020";
+        List<LegislatorList> lawTotals = new ArrayList<>();
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(apiUrl, String.class);
+        String responseBody = responseEntity.getBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            JsonNode dataArray = rootNode.get("npffdutiapkzbfyvr").get(1).get("row");
+
+            for (JsonNode dataNode : dataArray) {
+
+                String hgNm = dataNode.get("HG_NM").asText();
+                String polyNm = dataNode.get("POLY_NM").asText();
+                String unitNm = dataNode.get("UNIT_NM").asText();
+
+                Integer score = voteQueryService.getLegislatorTotalScore(hgNm);
+
+                if (score == null) {
+                    score = 0;
+                }
+
+                LegislatorList result = new LegislatorList();
+                result.setName(hgNm);
+                result.setSection(polyNm);
+                result.setUnit(unitNm);
+                result.setScore(score);
+
+                lawTotals.add(result);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        lawTotals.sort(Comparator.comparing(LegislatorList::getName));
+        return lawTotals;
+    }
 
 }
