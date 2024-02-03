@@ -1,8 +1,10 @@
 package com.congress.coremodule.vote.application.mapper;
 
 import com.congress.coremodule.law.domain.entity.Law;
+import com.congress.coremodule.law.domain.entity.LegislateLaw;
 import com.congress.coremodule.member.domain.entity.Member;
 import com.congress.coremodule.vote.domain.entity.HashTag;
+import com.congress.coremodule.vote.domain.entity.LegislateVote;
 import com.congress.coremodule.vote.domain.entity.Vote;
 
 public class HashTagMapper {
@@ -25,6 +27,15 @@ public class HashTagMapper {
                 .score(score)
                 .member(member)
                 .law(law)
+                .build();
+    }
+
+    public static LegislateVote toLegislatorVote(Integer score, Member member, LegislateLaw law) {
+
+        return LegislateVote.builder()
+                .score(score)
+                .member(member)
+                .legislateLaw(law)
                 .build();
     }
 }

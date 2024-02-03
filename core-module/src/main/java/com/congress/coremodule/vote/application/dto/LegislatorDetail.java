@@ -21,4 +21,16 @@ public class LegislatorDetail {
     private String unitNm;
     private String polyNm;
     private String origNm;
+
+    private String ftToDateOne;
+    private String profileSjOne;
+
+    private String frToDateTwo;
+    private String profileSjTwo;
+
+    private String tUrl;
+    private String fUrl;
+    private String yUrl;
+    private String bUrl;
+
 }
