@@ -2,6 +2,7 @@ package com.congress.coremodule.vote.application.service;
 
 import com.congress.coremodule.vote.application.dto.HashTagInfo;
 import com.congress.coremodule.vote.application.dto.HashTagRank;
+import com.congress.coremodule.vote.application.dto.LegislatorVoteInfo;
 import com.congress.coremodule.vote.application.dto.VoteInfo;
 import com.congress.coremodule.vote.domain.service.VoteQueryService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,18 @@ public class VoteQueryUseCase {
         voteQueryService.saveVote(voteInfo);
     }
 
+    public void saveLegislatorRenewalScore(LegislatorVoteInfo voteInfo) {
+
+        voteQueryService.saveLegislatorVote(voteInfo);
+    }
+
     public Integer getTotalScore(String lawName) {
 
         return voteQueryService.getTotalScore(lawName);
+    }
+
+    public Integer getLegislatorTotalScore(String legislatorName) {
+
+        return voteQueryService.getLegislatorTotalScore(legislatorName);
     }
 }

@@ -2,12 +2,14 @@ package com.congress.coremodule.vote.domain.service;
 
 import com.congress.commonmodule.exception.Error;
 import com.congress.coremodule.law.domain.entity.Law;
+import com.congress.coremodule.law.domain.entity.LegislateLaw;
 import com.congress.coremodule.law.domain.repository.LawRepository;
 import com.congress.coremodule.law.domain.repository.LegislateLawRepository;
 import com.congress.coremodule.member.domain.entity.Member;
 import com.congress.coremodule.member.domain.repository.MemberRepository;
 import com.congress.coremodule.vote.application.dto.HashTagInfo;
 import com.congress.coremodule.vote.application.dto.HashTagRank;
+import com.congress.coremodule.vote.application.dto.LegislatorVoteInfo;
 import com.congress.coremodule.vote.application.dto.VoteInfo;
 import com.congress.coremodule.vote.application.mapper.HashTagMapper;
 import com.congress.coremodule.vote.domain.entity.HashTag;
@@ -63,6 +65,20 @@ public class VoteQueryService {
 
             Vote vote = HashTagMapper.toVote(voteInfo.getScore(), member, law);
             voteRepository.save(vote);
+        }
+    }
+
+    public void saveLegislatorVote(LegislatorVoteInfo voteInfo) {
+
+        if (legislateVoteRepository.countByUserIdAndLegislatorName(voteInfo.getUserId(), voteInfo.getLegislatorName()) >= 1) {
+            throw new VoteException(Error.VOTE_DUPLICATE);
+        } else {
+
+            Member member = memberRepository.findMemberByUserId(voteInfo.getUserId());
+            LegislateLaw law = legislateLawRepository.findLegislateLawByName(voteInfo.getLegislatorName());
+
+            LegislateVote vote = HashTagMapper.toLegislatorVote(voteInfo.getScore(), member, law);
+            legislateVoteRepository.save(vote);
         }
     }
 
