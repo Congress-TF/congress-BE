@@ -11,7 +11,10 @@ import com.congress.coremodule.vote.application.dto.LegislatorDetail;
 import com.congress.coremodule.vote.application.dto.LegislatorList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -79,11 +82,7 @@ public class LawController {
 
         final LegislatorReq legislatorReq = LegislatorReq.builder().userId(userId).legislatorName(legislatorName).build();
         LegislatorDetail result = lawQueryUseCase.getLegislatorDetail(legislatorReq);
-        return ApplicationResponse.ok(result, "의안 상세페이지 정보입니다.");
+        return ApplicationResponse.ok(result, "국회의원 상세페이지 정보입니다.");
     }
-
-    /**
-     * 국회의원 참여도 투표
-     */
 
 }

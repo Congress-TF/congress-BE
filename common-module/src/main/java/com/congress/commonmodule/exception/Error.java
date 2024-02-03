@@ -19,8 +19,8 @@ public enum Error {
 
     //VOTE
     HASHTAG_DUPLICATE("이미 의견을 참여하셨습니다.", 400),
-    VOTE_DUPLICATE("이미 필요도 투표를 참여하셨습니다.", 400)
-
+    VOTE_DUPLICATE("이미 필요도 투표를 참여하셨습니다.", 400),
+    LEGISLATOR_VOTE_DUPLICATE("이미 의정활동 참여도 국민투표를 참여하셨습니다.", 400)
     ;
 
     private final String message;
