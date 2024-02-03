@@ -7,10 +7,9 @@ import lombok.extern.jackson.Jacksonized;
 @Data
 @Builder
 @Jacksonized
-public class MyPageAttendance {
+public class MyPageLegislator {
 
-    private String lawName;
+    private String legislatorName;
     private Integer score;
-    private String hashtag;
     private Integer totalScore;
 }
