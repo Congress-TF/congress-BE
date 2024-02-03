@@ -28,9 +28,4 @@ public class LegislatorDetail {
     private String frToDateTwo;
     private String profileSjTwo;
 
-    private String tUrl;
-    private String fUrl;
-    private String yUrl;
-    private String bUrl;
-
 }

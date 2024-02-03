@@ -164,32 +164,55 @@ public class LawQueryUseCase {
         try {
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode dataArray = rootNode.get("npffdutiapkzbfyvr").get(1).get("row");
+            JsonNode dataNode = dataArray.get(0);
 
-            for (JsonNode dataNode : dataArray) {
+            String hgNm = dataNode.get("HG_NM").asText();
+            String bthDate = dataNode.get("BTH_DATE").asText();
+            String sexGbnNm = dataNode.get("SEX_GBN_NM").asText();
+            String reeleGbnNm = dataNode.get("REELE_GBN_NM").asText();
+            String units = dataNode.get("UNITS").asText();
+            String unitNm = dataNode.get("UNIT_NM").asText();
+            String polyNm = dataNode.get("POLY_NM").asText();
+            String origNm = dataNode.get("ORIG_NM").asText();
 
-                String hgNm = dataNode.get("HG_NM").asText();
-                String bthDate = dataNode.get("BTH_DATE").asText();
-                String sexGbnNm = dataNode.get("SEX_GBN_NM").asText();
-                String reeleGbnNm = dataNode.get("REELE_GBN_NM").asText();
-                String units = dataNode.get("UNITS").asText();
-                String unitNm = dataNode.get("UNIT_NM").asText();
-                String polyNm = dataNode.get("POLY_NM").asText();
-                String origNm = dataNode.get("ORIG_NM").asText();
+            result.setHgNm(hgNm);
+            result.setBthDate(bthDate);
+            result.setSexGbnNm(sexGbnNm);
+            result.setReeleGbnNm(reeleGbnNm);
+            result.setUnits(units);
+            result.setUnitNm(unitNm);
+            result.setPolyNm(polyNm);
+            result.setOrigNm(origNm);
 
-                result.setHgNm(hgNm);
-                result.setBthDate(bthDate);
-                result.setSexGbnNm(sexGbnNm);
-                result.setReeleGbnNm(reeleGbnNm);
-                result.setUnits(units);
-                result.setUnitNm(unitNm);
-                result.setPolyNm(polyNm);
-                result.setOrigNm(origNm);
-
-                if (!lawQueryService.isLegislatorAlreadySaved(result.getHgNm())) {
-                    lawQueryService.saveLegislator(result.getHgNm());
-                }
-                return result;
+            if (!lawQueryService.isLegislatorAlreadySaved(result.getHgNm())) {
+                lawQueryService.saveLegislator(result.getHgNm());
             }
+
+            // 의원 이력
+            String apiUrlAno = "https://open.assembly.go.kr/portal/openapi/nfzegpkvaclgtscxt?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&PROFILE_UNIT_CD=100020"
+                    + "&HG_NM=" + req.getLegislatorName();
+            ResponseEntity<String> responseEntityAno = restTemplate.getForEntity(apiUrlAno, String.class);
+            String responseBodyAno = responseEntityAno.getBody();
+
+            JsonNode rootNodeAno = objectMapper.readTree(responseBodyAno);
+            JsonNode dataArrayAno = rootNodeAno.get("nfzegpkvaclgtscxt").get(1).get("row");
+            JsonNode dataNodeAno = dataArrayAno.get(0);
+
+            result.setFtToDateOne(dataNodeAno.get("FRTO_DATE").asText());
+            result.setProfileSjOne(dataNodeAno.get("PROFILE_SJ").asText());
+
+            // 의원 경력
+            String apiUrlSnd = "https://open.assembly.go.kr/portal/openapi/nqbeopthavwwfbekw?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&PROFILE_UNIT_CD=100020"
+                    + "&HG_NM=" + req.getLegislatorName();
+            ResponseEntity<String> responseEntitySnd = restTemplate.getForEntity(apiUrlSnd, String.class);
+            String responseBodySnd = responseEntitySnd.getBody();
+
+            JsonNode rootNodeSnd = objectMapper.readTree(responseBodySnd);
+            JsonNode dataArraySnd = rootNodeSnd.get("nqbeopthavwwfbekw").get(1).get("row");
+            JsonNode dataNodeSnd = dataArraySnd.get(0);
+
+            result.setFrToDateTwo(dataNodeSnd.get("FRTO_DATE").asText());
+            result.setProfileSjTwo(dataNodeSnd.get("PROFILE_SJ").asText());
 
         } catch (IOException e) {
             e.printStackTrace();
