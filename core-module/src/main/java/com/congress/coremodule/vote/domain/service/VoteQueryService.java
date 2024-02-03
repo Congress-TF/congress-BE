@@ -3,6 +3,7 @@ package com.congress.coremodule.vote.domain.service;
 import com.congress.commonmodule.exception.Error;
 import com.congress.coremodule.law.domain.entity.Law;
 import com.congress.coremodule.law.domain.repository.LawRepository;
+import com.congress.coremodule.law.domain.repository.LegislateLawRepository;
 import com.congress.coremodule.member.domain.entity.Member;
 import com.congress.coremodule.member.domain.repository.MemberRepository;
 import com.congress.coremodule.vote.application.dto.HashTagInfo;
@@ -10,9 +11,11 @@ import com.congress.coremodule.vote.application.dto.HashTagRank;
 import com.congress.coremodule.vote.application.dto.VoteInfo;
 import com.congress.coremodule.vote.application.mapper.HashTagMapper;
 import com.congress.coremodule.vote.domain.entity.HashTag;
+import com.congress.coremodule.vote.domain.entity.LegislateVote;
 import com.congress.coremodule.vote.domain.entity.Vote;
 import com.congress.coremodule.vote.domain.exception.VoteException;
 import com.congress.coremodule.vote.domain.repository.HashTagRepository;
+import com.congress.coremodule.vote.domain.repository.LegislateVoteRepository;
 import com.congress.coremodule.vote.domain.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,8 @@ public class VoteQueryService {
     private final VoteRepository voteRepository;
     private final MemberRepository memberRepository;
     private final LawRepository lawRepository;
+    private final LegislateLawRepository legislateLawRepository;
+    private final LegislateVoteRepository legislateVoteRepository;
 
     public void saveHashTag(HashTagInfo hashTagInfo) {
 
@@ -67,6 +72,15 @@ public class VoteQueryService {
 
         return votes.stream()
                 .map(Vote::getScore)
+                .reduce(0, Integer::sum);
+    }
+
+    public Integer getLegislatorTotalScore(String hgName) {
+
+        List<LegislateVote> votes = legislateVoteRepository.findLegislateVotesByLegislateLawName(hgName);
+
+        return votes.stream()
+                .map(LegislateVote::getScore)
                 .reduce(0, Integer::sum);
     }
 }
