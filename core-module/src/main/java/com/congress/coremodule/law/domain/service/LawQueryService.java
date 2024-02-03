@@ -18,6 +18,14 @@ public class LawQueryService {
     private final LawRepository lawRepository;
     private final LegislateLawRepository legislateLawRepository;
 
+    public Law findLaw(Long lawId) {
+        return lawRepository.findLawById(lawId);
+    }
+
+    public LegislateLaw findLegislatorLaw(Long lawId) {
+        return legislateLawRepository.findLegislateLawById(lawId);
+    }
+
     public void saveLaw(String lawName) {
 
         final Law law = Law.builder().name(lawName).build();

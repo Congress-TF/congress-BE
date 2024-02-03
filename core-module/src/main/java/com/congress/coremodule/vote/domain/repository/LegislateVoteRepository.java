@@ -1,5 +1,6 @@
 package com.congress.coremodule.vote.domain.repository;
 
+import com.congress.coremodule.law.domain.entity.LegislateLaw;
 import com.congress.coremodule.vote.domain.entity.LegislateVote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,6 @@ public interface LegislateVoteRepository extends JpaRepository<LegislateVote, Lo
     long countByUserIdAndLegislatorName(@Param("userId") String userId, @Param("legislatorName") String legislatorName);
 
     List<LegislateVote> findLegislateVotesByLegislateLawName(String name);
+
+    LegislateVote findLegislateVoteByMemberId(Long memberId);
 }
