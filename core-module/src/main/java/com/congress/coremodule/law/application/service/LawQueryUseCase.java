@@ -112,7 +112,7 @@ public class LawQueryUseCase {
 
     public LawDetail getLawDetail(LawVoteReq req) {
         String apiUrl = "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21"
-                + "&BILL_NM=" + req.getLawName();
+                + "&BILL_NAME=" + req.getLawName();
         LawDetail result = new LawDetail();
 
         RestTemplate restTemplate = new RestTemplate();
