@@ -28,8 +28,10 @@ public class LawController {
      */
     @GetMapping("/voteresult")
     public ApplicationResponse<LawVoteResult> getVoteResult(
-            @RequestBody LawVoteReq lawVoteReq) {
+            @RequestParam String userId,
+            @RequestParam String lawName) {
 
+        final LawVoteReq lawVoteReq = LawVoteReq.builder().userId(userId).lawName(lawName).build();
         LawVoteResult result = lawQueryUseCase.getVoteResult(lawVoteReq);
         return ApplicationResponse.ok(result, "개정 정족수 현황입니다.");
     }
@@ -39,8 +41,10 @@ public class LawController {
      */
     @GetMapping("/detail")
     public ApplicationResponse<LawDetail> getLawDetail(
-            @RequestBody LawVoteReq lawVoteReq) {
+            @RequestParam String userId,
+            @RequestParam String lawName) {
 
+        final LawVoteReq lawVoteReq = LawVoteReq.builder().userId(userId).lawName(lawName).build();
         LawDetail result = lawQueryUseCase.getLawDetail(lawVoteReq);
         return ApplicationResponse.ok(result, "의안 상세페이지 정보입니다.");
     }
