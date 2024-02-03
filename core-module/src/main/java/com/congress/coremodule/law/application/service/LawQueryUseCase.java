@@ -58,6 +58,9 @@ public class LawQueryUseCase {
             e.printStackTrace();
         }
 
+        result.setBillNm(req.getLawName());
+        result.setYesCount("0");
+
         return result;
     }
 
@@ -108,7 +111,8 @@ public class LawQueryUseCase {
     }
 
     public LawDetail getLawDetail(LawVoteReq req) {
-        String apiUrl = "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21";
+        String apiUrl = "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&AGE=21"
+                + "&BILL_NM=" + req.getLawName();
         LawDetail result = new LawDetail();
 
         RestTemplate restTemplate = new RestTemplate();
@@ -122,25 +126,22 @@ public class LawQueryUseCase {
 
             for (JsonNode dataNode : dataArray) {
 
-                if (req.getLawName().equals(dataNode.get("BILL_NAME").asText())) {
+                String billNo = dataNode.get("BILL_NO").asText();
+                String billName = dataNode.get("BILL_NAME").asText();
+                String proposer = dataNode.get("PROPOSER").asText();
+                String proposeDt = dataNode.get("PROPOSE_DT").asText();
+                String detailLink = dataNode.get("DETAIL_LINK").asText();
 
-                    String billNo = dataNode.get("BILL_NO").asText();
-                    String billName = dataNode.get("BILL_NAME").asText();
-                    String proposer = dataNode.get("PROPOSER").asText();
-                    String proposeDt = dataNode.get("PROPOSE_DT").asText();
-                    String detailLink = dataNode.get("DETAIL_LINK").asText();
+                result.setBillNo(billNo);
+                result.setBillNm(billName);
+                result.setProposer(proposer);
+                result.setProposerDt(proposeDt);
+                result.setDetailLink(detailLink);
 
-                    result.setBillNo(billNo);
-                    result.setBillNm(billName);
-                    result.setProposer(proposer);
-                    result.setProposerDt(proposeDt);
-                    result.setDetailLink(detailLink);
-
-                    if (!lawQueryService.isLawAlreadySaved(result.getBillNm())) {
-                        lawQueryService.saveLaw(result.getBillNm());
-                    }
-                    return result;
+                if (!lawQueryService.isLawAlreadySaved(result.getBillNm())) {
+                    lawQueryService.saveLaw(result.getBillNm());
                 }
+                return result;
             }
 
         } catch (IOException e) {
@@ -151,7 +152,8 @@ public class LawQueryUseCase {
     }
 
     public LegislatorDetail getLegislatorDetail(LegislatorReq req) {
-        String apiUrl = "https://open.assembly.go.kr/portal/openapi/npffdutiapkzbfyvr?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&UNIT_CD=100020";
+        String apiUrl = "https://open.assembly.go.kr/portal/openapi/npffdutiapkzbfyvr?KEY=86f396b109764bb6bd688b181875d6ce&Type=json&pIndex=1&pSize=100&UNIT_CD=100020"
+                + "&HG_NM=" + req.getLegislatorName();
         LegislatorDetail result = new LegislatorDetail();
 
         RestTemplate restTemplate = new RestTemplate();
@@ -165,31 +167,28 @@ public class LawQueryUseCase {
 
             for (JsonNode dataNode : dataArray) {
 
-                if (req.getLegislatorName().equals(dataNode.get("HG_NM").asText())) {
+                String hgNm = dataNode.get("HG_NM").asText();
+                String bthDate = dataNode.get("BTH_DATE").asText();
+                String sexGbnNm = dataNode.get("SEX_GBN_NM").asText();
+                String reeleGbnNm = dataNode.get("REELE_GBN_NM").asText();
+                String units = dataNode.get("UNITS").asText();
+                String unitNm = dataNode.get("UNIT_NM").asText();
+                String polyNm = dataNode.get("POLY_NM").asText();
+                String origNm = dataNode.get("ORIG_NM").asText();
 
-                    String hgNm = dataNode.get("HG_NM").asText();
-                    String bthDate = dataNode.get("BTH_DATE").asText();
-                    String sexGbnNm = dataNode.get("SEX_GBN_NM").asText();
-                    String reeleGbnNm = dataNode.get("REELE_GBN_NM").asText();
-                    String units = dataNode.get("UNITS").asText();
-                    String unitNm = dataNode.get("UNIT_NM").asText();
-                    String polyNm = dataNode.get("POLY_NM").asText();
-                    String origNm = dataNode.get("ORIG_NM").asText();
+                result.setHgNm(hgNm);
+                result.setBthDate(bthDate);
+                result.setSexGbnNm(sexGbnNm);
+                result.setReeleGbnNm(reeleGbnNm);
+                result.setUnits(units);
+                result.setUnitNm(unitNm);
+                result.setPolyNm(polyNm);
+                result.setOrigNm(origNm);
 
-                    result.setHgNm(hgNm);
-                    result.setBthDate(bthDate);
-                    result.setSexGbnNm(sexGbnNm);
-                    result.setReeleGbnNm(reeleGbnNm);
-                    result.setUnits(units);
-                    result.setUnitNm(unitNm);
-                    result.setPolyNm(polyNm);
-                    result.setOrigNm(origNm);
-
-                    if (!lawQueryService.isLegislatorAlreadySaved(result.getHgNm())) {
-                        lawQueryService.saveLegislator(result.getHgNm());
-                    }
-                    return result;
+                if (!lawQueryService.isLegislatorAlreadySaved(result.getHgNm())) {
+                    lawQueryService.saveLegislator(result.getHgNm());
                 }
+                return result;
             }
 
         } catch (IOException e) {
