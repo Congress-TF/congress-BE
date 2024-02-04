@@ -24,8 +24,6 @@ public class MyPageUseCase {
     public List<MyPageAttendance> getMyLawAttendance(String userId) {
 
         Long memberId = myPageQueryService.getMemberId(userId);
-        List<String> tags = myPageQueryService.getHashTagNames(memberId);
-        List<Integer> scores = myPageQueryService.getVoteScores(memberId);
         List<Long> lawIds = myPageQueryService.getLawIds();
 
         List<MyPageAttendance> myPageAttendanceList = new ArrayList<>();
@@ -33,11 +31,14 @@ public class MyPageUseCase {
         int maxSize = myPageQueryService.getLawSize().intValue();
 
         for (int i = 0; i < maxSize; i++) {
-            String tag = (i < tags.size()) ? tags.get(i) : "";
+
             Long lawId = (i < lawIds.size()) ? lawIds.get(i) : null;
-            Integer score = (i < scores.size()) ? scores.get(i) : 0;
 
             if (lawId != null) {
+
+                String tag = myPageQueryService.getHashTagName(memberId, lawId);
+                Integer score = myPageQueryService.getVoteScoreSingle(memberId, lawId);
+
                 Law law = lawQueryService.findLaw(lawId);
                 Integer totalScore = voteQueryService.getTotalScore(law.getName());
 

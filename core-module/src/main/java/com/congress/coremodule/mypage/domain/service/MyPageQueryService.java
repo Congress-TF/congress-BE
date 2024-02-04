@@ -55,6 +55,11 @@ public class MyPageQueryService {
                 .toList();
     }
 
+    public String getHashTagName(Long memberId, Long lawId) {
+        HashTag hashTag = hashTagRepository.findHashTagsByMemberIdAndLawId(memberId, lawId);
+        return (hashTag != null) ? hashTag.getTag() : "";
+    }
+
     public List<String> getHashTagNames(Long memberId) {
         List<HashTag> hashTag = hashTagRepository.findHashTagsByMemberId(memberId);
         return hashTag.stream().map(HashTag::getTag).collect(Collectors.toList());
@@ -63,6 +68,11 @@ public class MyPageQueryService {
     public List<Integer> getVoteScores(Long memberId) {
         List<Vote> vote = voteRepository.findVotesByMemberId(memberId);
         return vote.stream().map(Vote::getScore).collect(Collectors.toList());
+    }
+
+    public Integer getVoteScoreSingle(Long memberId, Long lawId) {
+        Vote vote = voteRepository.findVoteByMemberIdAndLawId(memberId, lawId);
+        return (vote != null) ? vote.getScore() : 0;
     }
 
     public Integer getVoteScore(Long lawId) {

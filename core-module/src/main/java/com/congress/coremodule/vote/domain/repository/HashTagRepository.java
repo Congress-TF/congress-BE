@@ -17,5 +17,7 @@ public interface HashTagRepository extends JpaRepository<HashTag, Long> {
             "where h.law.name = :lawName GROUP BY h.tag ORDER BY COUNT(h) DESC")
     List<HashTagRank> findTagCounts(@Param("lawName") String lawName);
 
+    HashTag findHashTagsByMemberIdAndLawId(Long memberId, Long lawId);
+
     List<HashTag> findHashTagsByMemberId(Long memberId);
 }
