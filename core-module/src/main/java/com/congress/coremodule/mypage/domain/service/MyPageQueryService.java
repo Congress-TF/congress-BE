@@ -35,6 +35,18 @@ public class MyPageQueryService {
         return member.getId();
     }
 
+    public List<Long> getHashTagLaws(Long memberId) {
+        List<HashTag> hashTags = hashTagRepository.findHashTagsByMemberId(memberId);
+        List<Law> laws = hashTags.stream().map(HashTag::getLaw).toList();
+        return laws.stream().map(Law::getId).toList();
+    }
+
+    public List<Long> getMyPageLaws(Long memberId) {
+        List<LegislateVote> votes = legislateVoteRepository.findLegislateVotesByMemberId(memberId);
+        List<LegislateLaw> laws = votes.stream().map(LegislateVote::getLegislateLaw).toList();
+        return laws.stream().map(LegislateLaw::getId).toList();
+    }
+
     public Long getLawSize() {
 
         return lawRepository.count();

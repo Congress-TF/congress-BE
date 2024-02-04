@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +29,14 @@ public class MyPageUseCase {
 
         List<MyPageAttendance> myPageAttendanceList = new ArrayList<>();
 
-        int maxSize = myPageQueryService.getLawSize().intValue();
+        List<Long> hashTagLawIds = myPageQueryService.getHashTagLaws(memberId);
+        List<Long> legislatorLawIds = myPageQueryService.getMyPageLaws(memberId);
 
-        for (int i = 0; i < maxSize; i++) {
+        List<Long> nonOverlappingIds = hashTagLawIds.stream()
+                .filter(id -> !legislatorLawIds.contains(id))
+                .toList();
+
+        for (int i = 0; i < nonOverlappingIds.size(); i++) {
 
             Long lawId = (i < lawIds.size()) ? lawIds.get(i) : null;
 
