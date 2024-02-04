@@ -37,6 +37,7 @@ public class HashTagController {
     public ApplicationResponse<List<HashTagRank>> getHashTagRank(
             @PathVariable String lawName) {
 
+        System.out.println(lawName);
         List<HashTagRank> results = voteQueryUseCase.getHashTagRank(lawName);
         return ApplicationResponse.ok(results, "해시태그 순위 조회 결과입니다.");
     }

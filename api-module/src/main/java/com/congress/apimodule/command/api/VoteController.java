@@ -34,6 +34,7 @@ public class VoteController {
     public ApplicationResponse<Integer> voteSum(
             @PathVariable String lawName) {
 
+        System.out.println(lawName);
         Integer total = voteQueryUseCase.getTotalScore(lawName);
         return ApplicationResponse.ok(total, "누적 개정 필요도 점수입니다.");
     }
