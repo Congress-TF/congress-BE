@@ -41,10 +41,10 @@ public class MyPageQueryService {
         return laws.stream().map(Law::getId).toList();
     }
 
-    public List<Long> getMyPageLaws(Long memberId) {
-        List<LegislateVote> votes = legislateVoteRepository.findLegislateVotesByMemberId(memberId);
-        List<LegislateLaw> laws = votes.stream().map(LegislateVote::getLegislateLaw).toList();
-        return laws.stream().map(LegislateLaw::getId).toList();
+    public List<Long> getVoteLaws(Long memberId) {
+        List<Vote> votes = voteRepository.findVotesByMemberId(memberId);
+        List<Law> laws = votes.stream().map(Vote::getLaw).toList();
+        return laws.stream().map(Law::getId).toList();
     }
 
     public Long getLawSize() {

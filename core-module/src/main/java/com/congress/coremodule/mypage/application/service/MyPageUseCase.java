@@ -25,38 +25,34 @@ public class MyPageUseCase {
     public List<MyPageAttendance> getMyLawAttendance(String userId) {
 
         Long memberId = myPageQueryService.getMemberId(userId);
-        List<Long> lawIds = myPageQueryService.getLawIds();
 
         List<MyPageAttendance> myPageAttendanceList = new ArrayList<>();
 
         List<Long> hashTagLawIds = myPageQueryService.getHashTagLaws(memberId);
-        List<Long> legislatorLawIds = myPageQueryService.getMyPageLaws(memberId);
+        List<Long> voteIds = myPageQueryService.getVoteLaws(memberId);
 
-        List<Long> combinedList = Stream.concat(hashTagLawIds.stream(), legislatorLawIds.stream())
+        List<Long> combinedList = Stream.concat(hashTagLawIds.stream(), voteIds.stream())
                 .distinct()
                 .toList();
 
         for (int i = 0; i < combinedList.size(); i++) {
 
-            Long lawId = (i < lawIds.size()) ? lawIds.get(i) : null;
+            Long lawId = combinedList.get(i);
 
-            if (lawId != null) {
+            String tag = myPageQueryService.getHashTagName(memberId, lawId);
+            Integer score = myPageQueryService.getVoteScoreSingle(memberId, lawId);
 
-                String tag = myPageQueryService.getHashTagName(memberId, lawId);
-                Integer score = myPageQueryService.getVoteScoreSingle(memberId, lawId);
+            Law law = lawQueryService.findLaw(lawId);
+            Integer totalScore = voteQueryService.getTotalScore(law.getName());
 
-                Law law = lawQueryService.findLaw(lawId);
-                Integer totalScore = voteQueryService.getTotalScore(law.getName());
+            MyPageAttendance myPageAttendance = MyPageAttendance.builder()
+                    .lawName(law.getName())
+                    .hashtag(tag)
+                    .score(score)
+                    .totalScore(totalScore)
+                    .build();
 
-                MyPageAttendance myPageAttendance = MyPageAttendance.builder()
-                        .lawName(law.getName())
-                        .hashtag(tag)
-                        .score(score)
-                        .totalScore(totalScore)
-                        .build();
-
-                myPageAttendanceList.add(myPageAttendance);
-            }
+            myPageAttendanceList.add(myPageAttendance);
         }
 
         return myPageAttendanceList;
