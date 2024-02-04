@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,10 +31,9 @@ public class MyPageQueryService {
         return member.getId();
     }
 
-    public Long getLawId(Long memberId) {
-
-        HashTag hashTag = hashTagRepository.findHashTagByMemberId(memberId);
-        return hashTag.getLaw().getId();
+    public List<Long> getLawIds(Long memberId) {
+        List<HashTag> hashTags = hashTagRepository.findHashTagsByMemberId(memberId);
+        return hashTags.stream().map(hashTag -> hashTag.getLaw().getId()).collect(Collectors.toList());
     }
 
     public Long getLegislatorId(Long memberId) {
@@ -40,16 +42,14 @@ public class MyPageQueryService {
         return vote.getLegislateLaw().getId();
     }
 
-    public String getHashTagName(Long memberId) {
-
-        HashTag hashTag = hashTagRepository.findHashTagByMemberId(memberId);
-        return hashTag.getTag();
+    public List<String> getHashTagNames(Long memberId) {
+        List<HashTag> hashTag = hashTagRepository.findHashTagsByMemberId(memberId);
+        return hashTag.stream().map(HashTag::getTag).collect(Collectors.toList());
     }
 
-    public Integer getVoteScore(Long memberId) {
-
-        Vote vote = voteRepository.findVoteByMemberId(memberId);
-        return vote.getScore();
+    public Integer getVoteScore(Long lawId) {
+        Vote vote = voteRepository.findVoteByLawId(lawId);
+        return (vote != null) ? vote.getScore() : 0;
     }
 
     public Integer getLegislatorVoteScore(Long memberId) {
