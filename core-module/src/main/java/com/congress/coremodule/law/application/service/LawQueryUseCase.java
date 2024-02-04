@@ -41,7 +41,12 @@ public class LawQueryUseCase {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode rootNode = objectMapper.readTree(responseBody);
-            JsonNode dataArray = rootNode.get("nwbpacrgavhjryiph").get(1).get("row");
+            JsonNode resultCodeNodeOne = rootNode.path("RESULT").path("CODE");
+            JsonNode dataArray = null;
+
+            if (!resultCodeNodeOne.asText().equals("INFO-200")) {
+                dataArray = rootNode.get("nwbpacrgavhjryiph").get(1).get("row");
+            }
 
             for (JsonNode dataNode : dataArray) {
 
