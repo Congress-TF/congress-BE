@@ -48,13 +48,22 @@ public class LawQueryUseCase {
                 dataArray = rootNode.get("nwbpacrgavhjryiph").get(1).get("row");
             }
 
-            for (JsonNode dataNode : dataArray) {
+            if (dataArray != null) {
 
-                String billName = dataNode.get("BILL_NM").asText();
-                String yesCount = dataNode.get("YES_TCNT").asText();
+                for (JsonNode dataNode : dataArray) {
 
-                result.setBillNm(billName);
-                result.setYesCount(yesCount);
+                    String billName = dataNode.get("BILL_NM").asText();
+                    String yesCount = dataNode.get("YES_TCNT").asText();
+
+                    result.setBillNm(billName);
+                    result.setYesCount(yesCount);
+
+                    return result;
+                }
+            } else {
+
+                result.setBillNm("");
+                result.setYesCount("");
 
                 return result;
             }
