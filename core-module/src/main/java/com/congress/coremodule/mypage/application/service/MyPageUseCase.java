@@ -22,32 +22,39 @@ public class MyPageUseCase {
     private final LawQueryService lawQueryService;
 
     public List<MyPageAttendance> getMyLawAttendance(String userId) {
+
         Long memberId = myPageQueryService.getMemberId(userId);
         List<String> tags = myPageQueryService.getHashTagNames(memberId);
+        List<Integer> scores = myPageQueryService.getVoteScores(memberId);
         List<Long> lawIds = myPageQueryService.getLawIds(memberId);
 
         List<MyPageAttendance> myPageAttendanceList = new ArrayList<>();
 
-        for (int i = 0; i < Math.min(tags.size(), lawIds.size()); i++) {
-            String tag = tags.get(i);
-            Long lawId = lawIds.get(i);
+        int maxSize = Math.max(tags.size(), Math.max(scores.size(), lawIds.size()));
 
-            Law law = lawQueryService.findLaw(lawId);
-            Integer score = myPageQueryService.getVoteScore(law.getId());
-            Integer totalScore = voteQueryService.getTotalScore(law.getName());
+        for (int i = 0; i < maxSize; i++) {
+            String tag = (i < tags.size()) ? tags.get(i) : "";
+            Long lawId = (i < lawIds.size()) ? lawIds.get(i) : null;
+            Integer score = (i < scores.size()) ? scores.get(i) : 0;
 
-            MyPageAttendance myPageAttendance = MyPageAttendance.builder()
-                    .lawName(law.getName())
-                    .hashtag(tag)
-                    .score(score)
-                    .totalScore(totalScore)
-                    .build();
+            if (lawId != null) {
+                Law law = lawQueryService.findLaw(lawId);
+                Integer totalScore = voteQueryService.getTotalScore(law.getName());
 
-            myPageAttendanceList.add(myPageAttendance);
+                MyPageAttendance myPageAttendance = MyPageAttendance.builder()
+                        .lawName(law.getName())
+                        .hashtag(tag)
+                        .score(score)
+                        .totalScore(totalScore)
+                        .build();
+
+                myPageAttendanceList.add(myPageAttendance);
+            }
         }
 
         return myPageAttendanceList;
     }
+
 
     public List<MyPageLegislator> getMyLegislatorAttendance(String userId) {
         Long memberId = myPageQueryService.getMemberId(userId);

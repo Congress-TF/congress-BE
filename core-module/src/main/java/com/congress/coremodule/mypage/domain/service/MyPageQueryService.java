@@ -47,6 +47,11 @@ public class MyPageQueryService {
         return hashTag.stream().map(HashTag::getTag).collect(Collectors.toList());
     }
 
+    public List<Integer> getVoteScores(Long memberId) {
+        List<Vote> vote = voteRepository.findVotesByMemberId(memberId);
+        return vote.stream().map(Vote::getScore).collect(Collectors.toList());
+    }
+
     public Integer getVoteScore(Long lawId) {
         Vote vote = voteRepository.findVoteByLawId(lawId);
         return (vote != null) ? vote.getScore() : 0;
