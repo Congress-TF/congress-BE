@@ -1,5 +1,7 @@
 package com.congress.coremodule.mypage.domain.service;
 
+import com.congress.coremodule.law.domain.entity.Law;
+import com.congress.coremodule.law.domain.repository.LawRepository;
 import com.congress.coremodule.member.domain.entity.Member;
 import com.congress.coremodule.member.domain.repository.MemberRepository;
 import com.congress.coremodule.vote.domain.entity.HashTag;
@@ -24,6 +26,7 @@ public class MyPageQueryService {
     private final HashTagRepository hashTagRepository;
     private final VoteRepository voteRepository;
     private final LegislateVoteRepository legislateVoteRepository;
+    private final LawRepository lawRepository;
 
     public Long getMemberId(String userId) {
 
@@ -31,9 +34,14 @@ public class MyPageQueryService {
         return member.getId();
     }
 
-    public List<Long> getLawIds(Long memberId) {
-        List<HashTag> hashTags = hashTagRepository.findHashTagsByMemberId(memberId);
-        return hashTags.stream().map(hashTag -> hashTag.getLaw().getId()).collect(Collectors.toList());
+    public Long getLawSize() {
+
+        return lawRepository.count();
+    }
+
+    public List<Long> getLawIds() {
+        List<Law> laws = lawRepository.findAll();
+        return laws.stream().map(Law::getId).collect(Collectors.toList());
     }
 
     public List<Long> getLegislatorIds(Long memberId) {

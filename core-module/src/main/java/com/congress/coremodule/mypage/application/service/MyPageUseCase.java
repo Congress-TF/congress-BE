@@ -26,11 +26,11 @@ public class MyPageUseCase {
         Long memberId = myPageQueryService.getMemberId(userId);
         List<String> tags = myPageQueryService.getHashTagNames(memberId);
         List<Integer> scores = myPageQueryService.getVoteScores(memberId);
-        List<Long> lawIds = myPageQueryService.getLawIds(memberId);
+        List<Long> lawIds = myPageQueryService.getLawIds();
 
         List<MyPageAttendance> myPageAttendanceList = new ArrayList<>();
 
-        int maxSize = Math.max(tags.size(), Math.max(scores.size(), lawIds.size()));
+        int maxSize = myPageQueryService.getLawSize().intValue();
 
         for (int i = 0; i < maxSize; i++) {
             String tag = (i < tags.size()) ? tags.get(i) : "";
