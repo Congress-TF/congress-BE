@@ -198,9 +198,14 @@ public class LawQueryUseCase {
                 String responseBodyAno = responseEntityAno.getBody();
 
                 JsonNode rootNodeAno = objectMapper.readTree(responseBodyAno);
-                JsonNode dataArrayAno = rootNodeAno.get("nfzegpkvaclgtscxt").get(1).get("row");
+                JsonNode resultCodeNode = rootNodeAno.path("RESULT").path("CODE");
+                JsonNode dataArrayAno = null;
 
-                if (dataArrayAno != null && dataArrayAno.size() > 0) {
+                if (!resultCodeNode.asText().equals("INFO-200")) {
+                    dataArrayAno = rootNodeAno.get("nfzegpkvaclgtscxt").get(1).get("row");
+                }
+
+                if (dataArrayAno != null && dataArrayAno.isArray() && !dataArrayAno.isEmpty()) {
                     JsonNode dataNodeAno = dataArrayAno.get(0);
                     result.setFtToDateOne(dataNodeAno.get("FRTO_DATE").asText());
                     result.setProfileSjOne(dataNodeAno.get("PROFILE_SJ").asText());
@@ -217,7 +222,12 @@ public class LawQueryUseCase {
                 String responseBodySnd = responseEntitySnd.getBody();
 
                 JsonNode rootNodeSnd = objectMapper.readTree(responseBodySnd);
-                JsonNode dataArraySnd = rootNodeSnd.get("nqbeopthavwwfbekw").get(1).get("row");
+                JsonNode resultCodeNodeSnd = rootNodeAno.path("RESULT").path("CODE");
+                JsonNode dataArraySnd = null;
+
+                if (!resultCodeNodeSnd.asText().equals("INFO-200")) {
+                    dataArraySnd = rootNodeSnd.get("nqbeopthavwwfbekw").get(1).get("row");
+                }
 
                 if (dataArraySnd != null && dataArraySnd.size() > 0) {
                     JsonNode dataNodeSnd = dataArraySnd.get(0);
