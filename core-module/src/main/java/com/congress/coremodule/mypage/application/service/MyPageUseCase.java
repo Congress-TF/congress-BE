@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +32,11 @@ public class MyPageUseCase {
         List<Long> hashTagLawIds = myPageQueryService.getHashTagLaws(memberId);
         List<Long> legislatorLawIds = myPageQueryService.getMyPageLaws(memberId);
 
-        List<Long> nonOverlappingIds = hashTagLawIds.stream()
-                .filter(id -> !legislatorLawIds.contains(id))
+        List<Long> combinedList = Stream.concat(hashTagLawIds.stream(), legislatorLawIds.stream())
+                .distinct()
                 .toList();
 
-        for (int i = 0; i < nonOverlappingIds.size(); i++) {
+        for (int i = 0; i < combinedList.size(); i++) {
 
             Long lawId = (i < lawIds.size()) ? lawIds.get(i) : null;
 
