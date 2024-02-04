@@ -1,6 +1,7 @@
 package com.congress.coremodule.mypage.domain.service;
 
 import com.congress.coremodule.law.domain.entity.Law;
+import com.congress.coremodule.law.domain.entity.LegislateLaw;
 import com.congress.coremodule.law.domain.repository.LawRepository;
 import com.congress.coremodule.member.domain.entity.Member;
 import com.congress.coremodule.member.domain.repository.MemberRepository;
@@ -46,8 +47,12 @@ public class MyPageQueryService {
 
     public List<Long> getLegislatorIds(Long memberId) {
 
-        List<LegislateVote> vote = legislateVoteRepository.findLegislateVotesByMemberId(memberId);
-        return vote.stream().map(LegislateVote::getId).collect(Collectors.toList());
+        return legislateVoteRepository
+                .findLegislateVotesByMemberId(memberId)
+                .stream()
+                .map(LegislateVote::getLegislateLaw)
+                .map(LegislateLaw::getId)
+                .toList();
     }
 
     public List<String> getHashTagNames(Long memberId) {
