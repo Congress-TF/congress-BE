@@ -70,9 +70,9 @@ public class MyPageQueryService {
         return (vote != null) ? vote.getScore() : 0;
     }
 
-    public Integer getLegislatorVoteScore(Long lawId) {
+    public Integer getLegislatorVoteScore(Long lawId, Long memberId) {
 
-        LegislateVote vote = legislateVoteRepository.findLegislateVoteByLegislateLawId(lawId);
+        LegislateVote vote = legislateVoteRepository.findLegislateVoteByLegislateLawIdAndMemberId(lawId, memberId);
         return vote.getScore();
     }
 }

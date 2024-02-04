@@ -64,7 +64,7 @@ public class MyPageUseCase {
 
         for (Long legislatorId : legislatorIds) {
             LegislateLaw law = lawQueryService.findLegislatorLaw(legislatorId);
-            Integer score = myPageQueryService.getLegislatorVoteScore(law.getId());
+            Integer score = myPageQueryService.getLegislatorVoteScore(law.getId(), memberId);
             Integer totalScore = voteQueryService.getLegislatorTotalScore(law.getName());
 
             MyPageLegislator myPageLegislator = MyPageLegislator.builder()

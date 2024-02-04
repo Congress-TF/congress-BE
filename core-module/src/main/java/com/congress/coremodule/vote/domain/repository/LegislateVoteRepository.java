@@ -16,5 +16,5 @@ public interface LegislateVoteRepository extends JpaRepository<LegislateVote, Lo
 
     List<LegislateVote> findLegislateVotesByMemberId(Long memberId);
 
-    LegislateVote findLegislateVoteByLegislateLawId(Long lawId);
+    LegislateVote findLegislateVoteByLegislateLawIdAndMemberId(Long lawId, Long memberId);
 }
