@@ -10,6 +10,9 @@ import com.congress.coremodule.vote.domain.service.VoteQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MyPageUseCase {
@@ -18,23 +21,34 @@ public class MyPageUseCase {
     private final VoteQueryService voteQueryService;
     private final LawQueryService lawQueryService;
 
-    public MyPageAttendance getMyLawAttendance(String userId) {
-
+    public List<MyPageAttendance> getMyLawAttendance(String userId) {
         Long memberId = myPageQueryService.getMemberId(userId);
-        String tag = myPageQueryService.getHashTagName(memberId);
-        Long lawId = myPageQueryService.getLawId(memberId);
-        Integer score = myPageQueryService.getVoteScore(memberId);
+        List<String> tags = myPageQueryService.getHashTagNames(memberId);
+        List<Long> lawIds = myPageQueryService.getLawIds(memberId);
 
-        Law law = lawQueryService.findLaw(lawId);
-        Integer totalScore = voteQueryService.getTotalScore(law.getName());
+        List<MyPageAttendance> myPageAttendanceList = new ArrayList<>();
 
-        return MyPageAttendance.builder()
-                .lawName(law.getName())
-                .hashtag(tag)
-                .score(score)
-                .totalScore(totalScore)
-                .build();
+        for (int i = 0; i < Math.min(tags.size(), lawIds.size()); i++) {
+            String tag = tags.get(i);
+            Long lawId = lawIds.get(i);
+
+            Law law = lawQueryService.findLaw(lawId);
+            Integer score = myPageQueryService.getVoteScore(law.getId());
+            Integer totalScore = voteQueryService.getTotalScore(law.getName());
+
+            MyPageAttendance myPageAttendance = MyPageAttendance.builder()
+                    .lawName(law.getName())
+                    .hashtag(tag)
+                    .score(score)
+                    .totalScore(totalScore)
+                    .build();
+
+            myPageAttendanceList.add(myPageAttendance);
+        }
+
+        return myPageAttendanceList;
     }
+
 
     public MyPageLegislator getMyLegislatorAttendance(String userId) {
 

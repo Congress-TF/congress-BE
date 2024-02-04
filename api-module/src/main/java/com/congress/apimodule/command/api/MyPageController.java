@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -23,11 +25,11 @@ public class MyPageController {
      * 내 의견 목록 (개정 필요도)
      */
     @GetMapping("/vote")
-    public ApplicationResponse<MyPageAttendance> getMyVoteAttendance(
+    public ApplicationResponse<List<MyPageAttendance>> getMyVoteAttendance(
             @RequestParam String userId
     ) {
 
-        MyPageAttendance attendance = myPageUseCase.getMyLawAttendance(userId);
+        List<MyPageAttendance> attendance = myPageUseCase.getMyLawAttendance(userId);
         return ApplicationResponse.ok(attendance, "내 개정 필요도 의견 목록입니다.");
     }
 
