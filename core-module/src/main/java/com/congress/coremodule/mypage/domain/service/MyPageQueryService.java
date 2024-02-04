@@ -36,10 +36,10 @@ public class MyPageQueryService {
         return hashTags.stream().map(hashTag -> hashTag.getLaw().getId()).collect(Collectors.toList());
     }
 
-    public Long getLegislatorId(Long memberId) {
+    public List<Long> getLegislatorIds(Long memberId) {
 
-        LegislateVote vote = legislateVoteRepository.findLegislateVoteByMemberId(memberId);
-        return vote.getLegislateLaw().getId();
+        List<LegislateVote> vote = legislateVoteRepository.findLegislateVotesByMemberId(memberId);
+        return vote.stream().map(LegislateVote::getId).collect(Collectors.toList());
     }
 
     public List<String> getHashTagNames(Long memberId) {
@@ -52,9 +52,9 @@ public class MyPageQueryService {
         return (vote != null) ? vote.getScore() : 0;
     }
 
-    public Integer getLegislatorVoteScore(Long memberId) {
+    public Integer getLegislatorVoteScore(Long lawId) {
 
-        LegislateVote vote = legislateVoteRepository.findLegislateVoteByMemberId(memberId);
+        LegislateVote vote = legislateVoteRepository.findLegislateVoteByLegislateLawId(lawId);
         return vote.getScore();
     }
 }

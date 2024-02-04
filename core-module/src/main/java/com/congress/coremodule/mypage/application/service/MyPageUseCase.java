@@ -49,20 +49,27 @@ public class MyPageUseCase {
         return myPageAttendanceList;
     }
 
-
-    public MyPageLegislator getMyLegislatorAttendance(String userId) {
-
+    public List<MyPageLegislator> getMyLegislatorAttendance(String userId) {
         Long memberId = myPageQueryService.getMemberId(userId);
-        Long legislatorId = myPageQueryService.getLegislatorId(memberId);
-        Integer score = myPageQueryService.getLegislatorVoteScore(memberId);
+        List<Long> legislatorIds = myPageQueryService.getLegislatorIds(memberId);
 
-        LegislateLaw law = lawQueryService.findLegislatorLaw(legislatorId);
-        Integer totalScore = voteQueryService.getLegislatorTotalScore(law.getName());
+        List<MyPageLegislator> myPageLegislatorList = new ArrayList<>();
 
-        return MyPageLegislator.builder()
-                .legislatorName(law.getName())
-                .score(score)
-                .totalScore(totalScore)
-                .build();
+        for (Long legislatorId : legislatorIds) {
+            LegislateLaw law = lawQueryService.findLegislatorLaw(legislatorId);
+            Integer score = myPageQueryService.getLegislatorVoteScore(law.getId());
+            Integer totalScore = voteQueryService.getLegislatorTotalScore(law.getName());
+
+            MyPageLegislator myPageLegislator = MyPageLegislator.builder()
+                    .legislatorName(law.getName())
+                    .score(score)
+                    .totalScore(totalScore)
+                    .build();
+
+            myPageLegislatorList.add(myPageLegislator);
+        }
+
+        return myPageLegislatorList;
     }
+
 }

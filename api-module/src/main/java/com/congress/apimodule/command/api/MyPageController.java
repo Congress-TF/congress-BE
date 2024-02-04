@@ -37,11 +37,11 @@ public class MyPageController {
      * 내 의견 목록 (의정활동 참여도)
      */
     @GetMapping("/legislator")
-    public ApplicationResponse<MyPageLegislator> getMyLegislatorAttendance(
+    public ApplicationResponse<List<MyPageLegislator>> getMyLegislatorAttendance(
             @RequestParam String userId
     ) {
 
-        MyPageLegislator attendance = myPageUseCase.getMyLegislatorAttendance(userId);
+        List<MyPageLegislator> attendance = myPageUseCase.getMyLegislatorAttendance(userId);
         return ApplicationResponse.ok(attendance, "내 의정활동 참여도 목록입니다.");
     }
 }
